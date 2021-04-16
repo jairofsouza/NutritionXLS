@@ -9,6 +9,7 @@ Created on Tue Apr 13 14:40:58 2021
 
 import pandas as pd
 import datetime
+import glob
 
 
 
@@ -84,18 +85,16 @@ def getData(files):
             dfPront = dfPront.append(dfProntAux, ignore_index=True)
     return dfAntro, dfBioq, dfPront
 
-import glob
-files = glob.glob("files/*.xls*")
-
-d1, d2, d3 = getData(files)
-
-
-writer = pd.ExcelWriter('dataset.xlsx')
-d3.to_excel(writer,'Prontuario')
-d1.to_excel(writer,'Antropometria')
-d2.to_excel(writer,'Bioquimica')
-# data.fillna() or similar.
-writer.save()
+def createDataset():
+    files = glob.glob("files/**/*.xls*", recursive=True)
+    d1, d2, d3 = getData(files)
+    writer = pd.ExcelWriter('dataset.xlsx')
+    d3.to_excel(writer,'Prontuario')
+    d1.to_excel(writer,'Antropometria')
+    d2.to_excel(writer,'Bioquimica')
+    # data.fillna() or similar.
+    writer.save()
+    print(‘Banco de dados criado com sucesso!’)
 
 
 
