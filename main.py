@@ -63,6 +63,31 @@ def getBioquimica(xls, ref):
     df['id'] = ref
     return df
     
+def getMedicamentos(xls, ref):
+    t = pd.read_excel(xls, sheet_name='MEDICAMENTOS', header=None, index_col=None, na_values='n/a')
+    columns=t.iloc[1,:6]
+    columns=columns.append(pd.Series('Tipo'),ignore_index=True)
+    columns=columns.append(pd.Series('ValorTipo'),ignore_index=True)
+    df = pd.DataFrame(columns=columns)
+    
+    blocos = ['Hipertensao', 'Diabetes', 'Insulina', 'Dislipidemia', 'Outra', 'Bicabornato', 'Suplemento']
+    posBlocos = [2, 14, 26, 38, 51, 63, 75]
+    limite = t.shape[0]
+    for p in range(len(blocos)):
+        valortipo = t.iloc[posBlocos[p]-2,1]
+        for cont in range(10):
+            i = cont+posBlocos[p]
+            if (i<t.shape[0] and t.iloc[i].notna().any()):
+                d2 = pd.DataFrame(t.iloc[i,:6]).transpose()
+                d2['Tipo'] = blocos[p]
+                d2['ValorTipo'] = valortipo
+                d2.columns = df.columns
+                df = df.append(d2,ignore_index=False)
+                
+    df.reset_index(inplace=True, drop=True)
+    df['id'] = ref
+    return df
+    
 def getProntuario(xls, ref):
     t = pd.read_excel(xls, sheet_name='PRONTUARIO', header=None, index_col=None, na_values='n/a')
     indexFilter = [0, 9, 10, 11, 12, 13, 14, 20, 21, 22, 32 ]
@@ -83,33 +108,37 @@ def getData(files):
         dfBioqAux  = getBioquimica(xls, i)
         dfProntAux = getProntuario(xls, i)
         dfAnaAux   = getAnamnese(xls, i)
+        dfMedAux   = getMedicamentos(xls, i)
         
         if i == 0:
             dfAntro = dfAntroAux
             dfBioq  = dfBioqAux
             dfPront = dfProntAux
             dfAna   = dfAnaAux
+            dfMed   = dfMedAux
         else:
             dfAntro = dfAntro.append(dfAntroAux, ignore_index=True)
             dfBioq  = dfBioq.append(dfBioqAux, ignore_index=True)
             dfPront = dfPront.append(dfProntAux, ignore_index=True)
             dfAna   = dfAna.append(dfAnaAux, ignore_index=True)
-    return dfAntro, dfBioq, dfPront, dfAna
+            dfMed   = dfMed.append(dfMedAux, ignore_index=True)
+    return dfAntro, dfBioq, dfPront, dfAna, dfMed
             
 
 def createDataset():
     files = glob.glob("files/**/*.xls*", recursive=True)
     files.sort(key=os.path.abspath)
-    d1, d2, d3, d4 = getData(files)
+    d1, d2, d3, d4, d5 = getData(files)
     writer = pd.ExcelWriter('dataset.xlsx')
     d3.to_excel(writer,'Prontuario')
     d1.to_excel(writer,'Antropometria')
     d2.to_excel(writer,'Bioquimica')
     d4.to_excel(writer,'Anamnese')
+    d5.to_excel(writer,'Medicamento')
     # data.fillna() or similar.
     writer.save()
     print('Banco de dados criado com sucesso! ')
 
 
-
+createDataset()
 
