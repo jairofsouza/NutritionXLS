@@ -32,6 +32,31 @@ def getAntropometria(xls, ref):
     df['id'] = ref
     return df
 
+def getAnaliseNutricional(xls, ref):
+    t = pd.read_excel(xls, sheet_name='ANALISE NUTRICIONAL', header=None, index_col=None, na_values='n/a')
+
+    dados = dict()
+    dados['ProteinaQuantidade']     = t.iloc[109,2]
+    dados['CarboidratoQuantidade']  = t.iloc[109,3]
+    dados['LipidioQuantidade']      = t.iloc[109,4]
+    dados['ProteinaGKG']            = t.iloc[110,2]
+    dados['CarboidratoGKG']         = t.iloc[110,3]
+    dados['LipidioGKG']             = t.iloc[110,4]
+    dados['ProteinaCalorias']       = t.iloc[111,2]
+    dados['CarboidratoCalorias']    = t.iloc[111,3]
+    dados['LipidioCalorias']        = t.iloc[111,4]
+    dados['ProteinaPercentagem']    = t.iloc[112,2]
+    dados['CarboidratoPercentagem'] = t.iloc[112,3]
+    dados['LipidioPercentagem']     = t.iloc[112,4]
+    dados['CaloriasTotais']         = t.iloc[113,2]
+    dados['KCalKG']                 = t.iloc[114,2]
+    dados['IngestaoRecomendada']    = t.iloc[116,2]
+
+    d2 = pd.DataFrame(data=dados, index=[0])
+    d2.rename(columns=lambda x: x.strip() if isinstance(x, str) else x, inplace=True)
+    d2['id'] = ref
+    return d2
+
 def getAnamnese(xls, ref):
     t = pd.read_excel(xls, sheet_name='ANAMNESE ALIMENTAR', header=None, index_col=None, na_values='n/a')
     indexFilter = [0, 1, 15]
@@ -109,6 +134,7 @@ def getData(files):
         dfProntAux = getProntuario(xls, i)
         dfAnaAux   = getAnamnese(xls, i)
         dfMedAux   = getMedicamentos(xls, i)
+        dfAnaNAux  = getAnaliseNutricional(xls, i)
         
         if i == 0:
             dfAntro = dfAntroAux
@@ -116,25 +142,28 @@ def getData(files):
             dfPront = dfProntAux
             dfAna   = dfAnaAux
             dfMed   = dfMedAux
+            dfAnaN  = dfAnaNAux
         else:
             dfAntro = dfAntro.append(dfAntroAux, ignore_index=True)
             dfBioq  = dfBioq.append(dfBioqAux, ignore_index=True)
             dfPront = dfPront.append(dfProntAux, ignore_index=True)
             dfAna   = dfAna.append(dfAnaAux, ignore_index=True)
             dfMed   = dfMed.append(dfMedAux, ignore_index=True)
-    return dfAntro, dfBioq, dfPront, dfAna, dfMed
+            dfAnaN  = dfAnaN.append(dfAnaNAux, ignore_index=True)
+    return dfAntro, dfBioq, dfPront, dfAna, dfMed, dfAnaN
             
 
 def createDataset():
     files = glob.glob("files/**/*.xls*", recursive=True)
     files.sort(key=os.path.abspath)
-    d1, d2, d3, d4, d5 = getData(files)
+    d1, d2, d3, d4, d5, d6 = getData(files)
     writer = pd.ExcelWriter('dataset.xlsx')
     d3.to_excel(writer,'Prontuario')
     d1.to_excel(writer,'Antropometria')
     d2.to_excel(writer,'Bioquimica')
     d4.to_excel(writer,'Anamnese')
     d5.to_excel(writer,'Medicamento')
+    d6.to_excel(writer,'AnaliseNutricional')
     # data.fillna() or similar.
     writer.save()
     print('Banco de dados criado com sucesso! ')
