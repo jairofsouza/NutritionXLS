@@ -125,7 +125,7 @@ def getProntuario(xls, ref):
     return d2
 
 def getData(files):
-    dfAntro = dfBioq = dfPront = pd.DataFrame()
+    dfAntro = dfBioq = dfPront = dfAna = dfMed = dfAnaN = pd.DataFrame()
     for i in range(len(files)):
         print('Reading file (' + str(i+1) + '/' + str(len(files))+'): ' + files[i])
         xls = pd.ExcelFile(files[i])
