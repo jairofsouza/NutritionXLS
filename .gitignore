@@ -1,0 +1,6 @@
+*.xlsx
+*.xls
+*.zip
+*.DS_Store
+*.pyc
+*checkpoint*
