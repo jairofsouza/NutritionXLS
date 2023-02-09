@@ -17,14 +17,29 @@ import os
 def getAcompanhamentoRetorno(xls, ref):
     t = pd.read_excel(xls, sheet_name='ACOMPANHAMENTO', header=None, index_col=None, na_values='n/a')
     indexFilter = [i for i in range(25)]
-    lista2 = [i for i in range(6) if i not in indexFilter]
-    e = t.iloc[lista2,:]
+ 
+    inicio=2
+    salto=22
+    fim=15
+    qColunas=9
 
-    d2 = pd.DataFrame(e.iloc[:,1]).transpose()
-    d2.columns = e.iloc[:,0]
-    d2.rename(columns=lambda x: x.strip() if isinstance(x, str) else x, inplace=True)
-    d2['id'] = ref
-    return d2
+    box = [(inicio+(i*salto),inicio+fim+(i*salto)) for i in range(5)]
+    locais = [i*3 for i in range(qColunas)]
+
+    total = None
+    for pos in locais:
+        for (inicio,fim) in box:
+            if pos+inicio != 2 and isinstance(t.iloc[inicio, pos+1], datetime.date):
+                #print(t.iloc[inicio, pos+1])
+                d1 = pd.DataFrame(t.iloc[inicio:fim,pos+1]).transpose().rename(columns=t.iloc[inicio:fim,pos])
+                if total is None:
+                    total = d1
+                else:
+                    total = pd.concat([total, d1],ignore_index=True)
+
+
+    total['id'] = ref
+    return total
 
 
 
@@ -170,7 +185,8 @@ def getProntuario(xls, ref):
     return d2
 
 def getData(files, hasAdesao):
-    dfAntro = dfBioq = dfPront = dfAna = dfMed = dfAnaN = pd.DataFrame()
+    dfAntro = dfBioq = dfPront = dfAna = dfMed = dfAnaN = dfAcom1C = dfAcompR = dfAdesao = pd.DataFrame()
+
     f = open("log.txt", "w")
 
     for i in range(len(files)):
@@ -181,6 +197,7 @@ def getData(files, hasAdesao):
             msg = ">>> [ERRO] " + str(e) + ": " + files[i] + "\n"
             print(msg)
             f.write(msg)
+            continue
         
         try:
             dfAntroAux  = getAntropometria(xls, i)         
