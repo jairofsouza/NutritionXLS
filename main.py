@@ -31,7 +31,7 @@ def getAcompanhamentoRetorno(xls, ref):
         for (inicio,fim) in box:
 #            print(pos,inicio)
 #            print(t.iloc[inicio:fim,pos+1], t.iloc[inicio:fim,pos])
-            if pos+inicio != 2 and isinstance(t.iloc[inicio, pos+1], datetime.date):
+            if pos+inicio != 2 and pos+1 < t.shape[1] and isinstance(t.iloc[inicio, pos+1], datetime.date):
                 d1 = pd.DataFrame(t.iloc[inicio:fim,pos+1]).transpose().rename(columns=t.iloc[inicio:fim,pos])
                 total = pd.concat([total, d1],ignore_index=True)
 
@@ -39,7 +39,6 @@ def getAcompanhamentoRetorno(xls, ref):
        total['id'] = ref
 
     return total
-
 
 
 def getAcompanhamentoPrimeiraConsulta(xls, ref):
