@@ -29,6 +29,7 @@ def getAcompanhamentoRetorno(xls, ref):
     total = None
     for pos in locais:
         for (inicio,fim) in box:
+            print(pos,inicio)
             if pos+inicio != 2 and isinstance(t.iloc[inicio, pos+1], datetime.date):
                 #print(t.iloc[inicio, pos+1])
                 d1 = pd.DataFrame(t.iloc[inicio:fim,pos+1]).transpose().rename(columns=t.iloc[inicio:fim,pos])
@@ -211,7 +212,7 @@ def getData(files, hasAdesao):
             if hasAdesao:
                 dfAdesaoAux = getAdesao(xls, i)
         except:
-            msg = '>>> [ERRO] Erro na coleta do arquivo' + files[i] + "\n"
+            msg = '>>> [ERRO] Erro na coleta do arquivo ' + files[i] + "\n"
             print(msg)
             f.write(msg)
             dfAntroAux  = dfAntroAux[0:0]
@@ -286,5 +287,5 @@ def createDataset(hasAdesao = True):
     print('Banco de dados criado com sucesso! ')
 
 
-createDataset(False)
+createDataset(True)
 
