@@ -26,20 +26,18 @@ def getAcompanhamentoRetorno(xls, ref):
     box = [(inicio+(i*salto),inicio+fim+(i*salto)) for i in range(5)]
     locais = [i*3 for i in range(qColunas)]
 
-    total = None
+    total = pd.DataFrame(columns=t.iloc[inicio+salto:inicio+salto+fim,0])
     for pos in locais:
         for (inicio,fim) in box:
-            print(pos,inicio)
+#            print(pos,inicio)
+#            print(t.iloc[inicio:fim,pos+1], t.iloc[inicio:fim,pos])
             if pos+inicio != 2 and isinstance(t.iloc[inicio, pos+1], datetime.date):
-                #print(t.iloc[inicio, pos+1])
                 d1 = pd.DataFrame(t.iloc[inicio:fim,pos+1]).transpose().rename(columns=t.iloc[inicio:fim,pos])
-                if total is None:
-                    total = d1
-                else:
-                    total = pd.concat([total, d1],ignore_index=True)
+                total = pd.concat([total, d1],ignore_index=True)
 
+    if not total.empty:
+       total['id'] = ref
 
-    total['id'] = ref
     return total
 
 
