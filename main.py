@@ -62,7 +62,7 @@ def getAcompanhamentoRetorno(xls, ref):
             total['id'] = ref
 
     except:
-        raise Exception("ACOMPANHAMENT RETORNO")
+        raise Exception("ACOMPANHAMENTO RETORNO")
 
 
     return total
@@ -235,6 +235,7 @@ def getProntuario(xls, ref):
 
 def getData(files, hasAdesao):
     dfAntro = dfBioq = dfPront = dfAna = dfMed = dfAnaN = dfAcom1C = dfAcompR = dfAdesao = dfPressao = pd.DataFrame()
+    lista = ["Antropometria", "Bioquimica", "Prontuario", "Anamnese", "Medicamentos", "AnaliseNutricional", "Acompanhamento (PrimeiraConsulta)", "Acompanhamento (Retornos)", "Adesao", "Controle PA"]
 
     f = open("log.txt", "w")
 
@@ -266,17 +267,24 @@ def getData(files, hasAdesao):
             f.write(msg)
             continue
 
-        dfAntro  = dfAntroAux  if dfAntro.empty  else dfAntro.append(dfAntroAux, ignore_index=True)
-        dfBioq   = dfBioqAux   if dfBioq.empty   else dfBioq.append(dfBioqAux, ignore_index=True)
-        dfPront  = dfProntAux  if dfPront.empty  else dfPront.append(dfProntAux, ignore_index=True)
-        dfAna    = dfAnaAux    if dfAna.empty    else dfAna.append(dfAnaAux, ignore_index=True)
-        dfMed    = dfMedAux    if dfMed.empty    else dfMed.append(dfMedAux, ignore_index=True)
-        dfAnaN   = dfAnaNAux   if dfAnaN.empty   else dfAnaN.append(dfAnaNAux, ignore_index=True)
-        dfAcom1C = dfAcom1CAux if dfAcom1C.empty else dfAcom1C.append(dfAcom1CAux, ignore_index=True)
-        dfAcompR = dfAcompaAux if dfAcompR.empty else dfAcompR.append(dfAcompaAux, ignore_index=True)
-        if hasAdesao:
-            dfAdesao = dfAdesaoAux   if dfAdesao.empty  else dfAdesao.append(dfAdesaoAux, ignore_index=True)
-            dfPressao = dfPressaoAux if dfPressao.empty else dfPressao.append(dfPressaoAux, ignore_index=True)
+        try:
+            line = 271 #guardar aqui esse número de linha!
+            dfAntro  = dfAntroAux  if dfAntro.empty  else dfAntro.append(dfAntroAux, ignore_index=True)
+            dfBioq   = dfBioqAux   if dfBioq.empty   else dfBioq.append(dfBioqAux, ignore_index=True)
+            dfPront  = dfProntAux  if dfPront.empty  else dfPront.append(dfProntAux, ignore_index=True)
+            dfAna    = dfAnaAux    if dfAna.empty    else dfAna.append(dfAnaAux, ignore_index=True)
+            dfMed    = dfMedAux    if dfMed.empty    else dfMed.append(dfMedAux, ignore_index=True)
+            dfAnaN   = dfAnaNAux   if dfAnaN.empty   else dfAnaN.append(dfAnaNAux, ignore_index=True)
+            dfAcom1C = dfAcom1CAux if dfAcom1C.empty else dfAcom1C.append(dfAcom1CAux, ignore_index=True)
+            dfAcompR = dfAcompaAux if dfAcompR.empty else dfAcompR.append(dfAcompaAux, ignore_index=True)
+            if hasAdesao:
+                dfAdesao = dfAdesaoAux   if dfAdesao.empty  else dfAdesao.append(dfAdesaoAux, ignore_index=True)
+                dfPressao = dfPressaoAux if dfPressao.empty else dfPressao.append(dfPressaoAux, ignore_index=True)
+        except Exception as e:
+            msg = '>>> [ERRO] Erro na coleta de dados (COLUNAS NÃO BATEM): ' + files[i] + " (" + str(lista[e.__traceback__.tb_lineno-line-1]) +  ")\n"
+            print(msg)
+            f.write(msg)
+            continue
     
     f.close()
     if hasAdesao:
