@@ -321,7 +321,7 @@ def createDataset(hasAdesao = True):
         d9.to_excel(writer,'Adesao')
         d10.to_excel(writer, 'Pressao')
     # data.fillna() or similar.
-    writer.save()
+    writer.close()
     print('Banco de dados criado com sucesso! ')
 
 
