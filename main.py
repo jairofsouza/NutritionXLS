@@ -262,7 +262,7 @@ def getData(files, hasAdesao):
                 dfAdesaoAux = getAdesao(xls, i)
                 dfPressaoAux   = getPressao(xls, i)
         except Exception as e:
-            f.write(traceback.format_exc())
+            print(traceback.format_exc())
             msg = '>>> [ERRO] Erro na coleta de dados: ' + files[i] + " (" + str(e) +  ")\n"
             print(msg)
             f.write(msg)
@@ -282,7 +282,7 @@ def getData(files, hasAdesao):
                 dfAdesao = dfAdesaoAux   if dfAdesao.empty  else dfAdesao.append(dfAdesaoAux, ignore_index=True)
                 dfPressao = dfPressaoAux if dfPressao.empty else dfPressao.append(dfPressaoAux, ignore_index=True)
         except Exception as e:
-            f.write(traceback.format_exc())
+            print(traceback.format_exc())
             msg = '>>> [ERRO] Erro na coleta de dados (COLUNAS NÃO BATEM): ' + files[i] + " (" + str(lista[e.__traceback__.tb_lineno-line-1]) +  ")\n"
             print(msg)
             f.write(msg)
