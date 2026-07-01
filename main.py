@@ -199,8 +199,11 @@ def getMedicamentos(xls, ref):
     try:
         t = pd.read_excel(xls, sheet_name='MEDICAMENTOS', header=None, index_col=None, na_values='n/a')
         columns=t.iloc[1,:6]
-        columns=columns.append(pd.Series('Tipo'),ignore_index=True)
-        columns=columns.append(pd.Series('ValorTipo'),ignore_index=True)
+        #columns=columns.append(pd.Series('Tipo'),ignore_index=True)
+        #columns=columns.append(pd.Series('ValorTipo'),ignore_index=True)
+        columns=pd.concat([columns,pd.Series('Tipo'),ignore_index=True)
+        columns=pd.concat([columns,pd.Series('ValorTipo'),ignore_index=True)
+        
         df = pd.DataFrame(columns=columns)
         
         blocos = ['Hipertensao', 'Diabetes', 'Insulina', 'Dislipidemia', 'Outra', 'Bicabornato', 'Suplemento']
