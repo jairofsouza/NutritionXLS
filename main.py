@@ -275,17 +275,17 @@ def getData(files, hasAdesao):
 
         try:
             line = 271 #guardar aqui esse número de linha!
-            dfAntro  = dfAntroAux  if dfAntro.empty  else dfAntro = pd.concat([dfAntro, dfAntroAux], ignore_index=True)
-            dfBioq   = dfBioqAux   if dfBioq.empty   else dfBioq = pd.concat([dfBioq, dfBioqAux], ignore_index=True)
-            dfPront  = dfProntAux  if dfPront.empty  else dfPront = pd.concat([dfPront, dfProntAux], ignore_index=True)
-            dfAna    = dfAnaAux    if dfAna.empty    else dfAna = pd.concat([dfAna, dfAnaAux], ignore_index=True)
-            dfMed    = dfMedAux    if dfMed.empty    else dfMed = pd.concat([dfMed, dfMedAux], ignore_index=True)
-            dfAnaN   = dfAnaNAux   if dfAnaN.empty   else dfAnaN = pd.concat([dfAnaN, dfAnaNAux], ignore_index=True)
-            dfAcom1C = dfAcom1CAux if dfAcom1C.empty else dfAcom1C = pd.concat([dfAcom1C, dfAcom1CAux], ignore_index=True)
-            dfAcompR = dfAcompaAux if dfAcompR.empty else dfAcompR = pd.concat([dfAcompR, dfAcompaAux], ignore_index=True)
+            dfAntro  = dfAntroAux  if dfAntro.empty  else pd.concat([dfAntro, dfAntroAux], ignore_index=True)
+            dfBioq   = dfBioqAux   if dfBioq.empty   else pd.concat([dfBioq, dfBioqAux], ignore_index=True)
+            dfPront  = dfProntAux  if dfPront.empty  else pd.concat([dfPront, dfProntAux], ignore_index=True)
+            dfAna    = dfAnaAux    if dfAna.empty    else pd.concat([dfAna, dfAnaAux], ignore_index=True)
+            dfMed    = dfMedAux    if dfMed.empty    else pd.concat([dfMed, dfMedAux], ignore_index=True)
+            dfAnaN   = dfAnaNAux   if dfAnaN.empty   else pd.concat([dfAnaN, dfAnaNAux], ignore_index=True)
+            dfAcom1C = dfAcom1CAux if dfAcom1C.empty else pd.concat([dfAcom1C, dfAcom1CAux], ignore_index=True)
+            dfAcompR = dfAcompaAux if dfAcompR.empty else pd.concat([dfAcompR, dfAcompaAux], ignore_index=True)
             if hasAdesao:
-                dfAdesao = dfAdesaoAux   if dfAdesao.empty  else dfAdesao = pd.concat([dfAdesao, dfAdesaoAux], ignore_index=True)
-                dfPressao = dfPressaoAux if dfPressao.empty else dfPressao = pd.concat([dfPressao, dfPressaoAux], ignore_index=True)
+                dfAdesao = dfAdesaoAux   if dfAdesao.empty  else pd.concat([dfAdesao, dfAdesaoAux], ignore_index=True)
+                dfPressao = dfPressaoAux if dfPressao.empty else pd.concat([dfPressao, dfPressaoAux], ignore_index=True)
         except Exception as e:
             print(traceback.format_exc())
             msg = '>>> [ERRO] Erro na coleta de dados (COLUNAS NÃO BATEM): ' + files[i] + " (" + str(lista[e.__traceback__.tb_lineno-line-1]) +  ")\n"
