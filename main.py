@@ -105,7 +105,7 @@ d3.to_excel(writer,'Prontuario')
 d1.to_excel(writer,'Antropometria')
 d2.to_excel(writer,'Bioquimica')
 # data.fillna() or similar.
-writer.save()
+writer.close()
 
 
 
