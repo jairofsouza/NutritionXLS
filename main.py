@@ -201,8 +201,8 @@ def getMedicamentos(xls, ref):
         columns=t.iloc[1,:6]
         #columns=columns.append(pd.Series('Tipo'),ignore_index=True)
         #columns=columns.append(pd.Series('ValorTipo'),ignore_index=True)
-        columns=pd.concat([columns,pd.Series('Tipo'),ignore_index=True)
-        columns=pd.concat([columns,pd.Series('ValorTipo'),ignore_index=True)
+        columns=pd.concat([columns,pd.Series('Tipo')],ignore_index=True)
+        columns=pd.concat([columns,pd.Series('ValorTipo')],ignore_index=True)
         
         df = pd.DataFrame(columns=columns)
         
