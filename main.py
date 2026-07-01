@@ -81,9 +81,9 @@ def getData(files):
             dfBioq  = dfBioqAux
             dfPront = dfProntAux
         else:
-            dfAntro = pd.concat([dfAntro, dfAntroAux], ignore_index=False)
-            dfBioq = pd.concat([dfBioq, dfBioqAux], ignore_index=False)
-            dfPront = pd.concat([dfPront, dfProntAux], ignore_index=False)
+            dfAntro = pd.concat([dfAntro, dfAntroAux], ignore_index=True)
+            dfBioq = pd.concat([dfBioq, dfBioqAux], ignore_index=True)
+            dfPront = pd.concat([dfPront, dfProntAux], ignore_index=True)
 
             #dfAntro = dfAntro.append(dfAntroAux, ignore_index=True)
             #dfBioq  = dfBioq.append(dfBioqAux, ignore_index=True)
